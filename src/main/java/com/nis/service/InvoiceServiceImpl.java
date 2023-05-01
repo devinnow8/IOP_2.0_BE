@@ -172,7 +172,7 @@ public class InvoiceServiceImpl implements InvoiceService {
             orderId = order.get("id");
             paymentDetails.setGateway("razorpay");
         }else{
-            orderId= stripeService.createPayementOrderId(invoice.getTotal(),invoice.getCurrency());
+            orderId= stripeService.createPayementOrderId(invoice.getTotal(),invoice.getCurrency(),invoiceId);
             paymentDetails.setGateway("stripe");
         }
 
