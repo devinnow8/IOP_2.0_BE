@@ -44,7 +44,7 @@ public class OrderScheduler {
                 System.out.println(status);
                 if(status=="paid"){
                     order.setStatus(PaymentStatus.Complete);
-                    invoiceService.updateInvoicePayment(order.getInvoice_id(),order.getId(),PaymentStatus.Complete);
+                    invoiceService.updateInvoicePayment(order.getInvoiceId(),order.getId(),PaymentStatus.Complete);
                 }else if(status==""){
                     order.setStatus(PaymentStatus.Cancelled);
                 }

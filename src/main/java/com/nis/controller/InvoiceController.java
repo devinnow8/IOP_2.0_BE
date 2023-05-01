@@ -1,6 +1,7 @@
 package com.nis.controller;
 
 import com.nis.entity.Invoice;
+import com.nis.entity.Payment;
 import com.nis.exception.ResourceNotFoundException;
 import com.nis.model.InvoiceListResponse;
 import com.nis.model.InvoiceListRequest;
@@ -15,6 +16,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/nis/invoice")
@@ -57,32 +60,37 @@ public class InvoiceController {
     public ResponseEntity<?> getInvoice(@PathVariable String invoiceId) throws ResourceNotFoundException {
 
         Invoice invoice = invoiceService.getInvoiceById(invoiceId);
-        return new ResponseEntity<>(invoice,HttpStatus.OK);
+        return new ResponseEntity<>(invoice, HttpStatus.OK);
 
     }
 
-
     @PutMapping("/{invoiceId}")
-    public ResponseEntity<?> updateInvoice(@PathVariable String invoiceId, @RequestBody InvoiceDTO invoiceDTO) throws Exception {
+    public ResponseEntity<?> updateInvoice(@PathVariable String invoiceId, @RequestBody InvoiceDTO invoiceDTO)
+            throws Exception {
         invoiceService.updateInvoice(invoiceId, invoiceDTO);
         return new ResponseEntity<>("Record Updated!", HttpStatus.OK);
 
     }
 
-    @PostMapping(value = {"/list"})
+    @PostMapping(value = { "/list" })
     public ResponseEntity<?> getInvoiceList(@RequestBody InvoiceListRequest request) throws Exception {
 
-        InvoiceListResponse response= new InvoiceListResponse();
-        Page<Invoice> pages = invoiceService.getInvoiceList( request);
+        InvoiceListResponse response = new InvoiceListResponse();
+        Page<Invoice> pages = invoiceService.getInvoiceList(request);
         if (pages != null && pages.getContent() != null) {
             response.setAppointmentList(pages.getContent());
-            response.setPage_number(pages.getNumber()+1);
+            response.setPage_number(pages.getNumber() + 1);
             response.setTotal_count(pages.getTotalElements());
             response.setTotal_pages(pages.getTotalPages());
         }
         return new ResponseEntity<>(response, HttpStatus.OK);
 
     }
+    @GetMapping("/orderDetails/{invoiceId}")
+    public ResponseEntity<?> getOrderDetailByInvoiceId(@PathVariable String invoiceId) throws ResourceNotFoundException {
 
+        List<Payment> invoice = invoiceService.getOrderListByInvoiceId(invoiceId);
+        return new ResponseEntity<>(invoice,HttpStatus.OK);
 
+    }
 }

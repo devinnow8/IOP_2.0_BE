@@ -40,7 +40,7 @@ public class RazorpayWebhookServiceImpl implements RazorpayWebhookService{
                 payment.setRazorpayPaymentId(entity.id);
                 paymentRepository.save(payment);
 
-                invoiceService.updateInvoicePayment(payment.getInvoice_id(),payment.getId(),PaymentStatus.Complete);
+                invoiceService.updateInvoicePayment(payment.getInvoiceId(),payment.getId(),PaymentStatus.Complete);
 
             }else{
                 logger.info("Payment status already upated");

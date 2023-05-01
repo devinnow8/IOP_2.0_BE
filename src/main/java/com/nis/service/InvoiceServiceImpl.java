@@ -181,7 +181,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         paymentDetails.setAmount(invoice.getTotal());
         paymentDetails.setRazorpayOrderId(orderId);
         paymentDetails.setCurrency(invoice.getCurrency());
-        paymentDetails.setInvoice_id(invoiceId);
+        paymentDetails.setInvoiceId(invoiceId);
 
         paymentRepository.save(paymentDetails);
 
@@ -204,7 +204,12 @@ public class InvoiceServiceImpl implements InvoiceService {
         return invoice;
     }
 
+    @Override
+    public List<Payment> getOrderListByInvoiceId(String invoiceId) throws ResourceNotFoundException {
+        List<Payment> invoice = paymentRepository.findByInvoiceId(invoiceId);
 
+        return invoice;
+    }
     @Override
     public byte[] getInvoicePdf(String appointmentId) throws Exception {
         Invoice appointment = invoiceRepository.findById(appointmentId)
@@ -289,7 +294,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         if(payment.getStatus()!=null && paymentDTO.getStatus()==PaymentStatus.Failed){
             payment.setStatus(PaymentStatus.Failed);
             paymentRepository.save(payment);
-            updateInvoicePayment(payment.getInvoice_id(), payment.getId(),PaymentStatus.Failed);
+            updateInvoicePayment(payment.getInvoiceId(), payment.getId(),PaymentStatus.Failed);
         }else if (paymentDTO.getGateway().equalsIgnoreCase("razorpay")){
             String signature = razorpayService.createSignature(
                     payment.getRazorpayOrderId() + "|" + paymentDTO.getRazorpay_payment_id());
@@ -306,11 +311,11 @@ public class InvoiceServiceImpl implements InvoiceService {
 
             paymentRepository.save(payment);
 
-            updateInvoicePayment(payment.getInvoice_id(), payment.getId(),PaymentStatus.Complete);
+            updateInvoicePayment(payment.getInvoiceId(), payment.getId(),PaymentStatus.Complete);
         } else if (paymentDTO.getGateway().equalsIgnoreCase("stripe")) {
             payment.setStatus(PaymentStatus.Complete);
             paymentRepository.save(payment);
-            updateInvoicePayment(payment.getInvoice_id(), payment.getId(),PaymentStatus.Complete);
+            updateInvoicePayment(payment.getInvoiceId(), payment.getId(),PaymentStatus.Complete);
         }
 
 

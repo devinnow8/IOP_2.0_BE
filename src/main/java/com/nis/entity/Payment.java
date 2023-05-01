@@ -15,7 +15,8 @@ public class Payment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String invoice_id;
+    @Column(name = "invoice_id")
+    private String invoiceId;
     private String razorpayOrderId;
 
     private String razorpayPaymentId;

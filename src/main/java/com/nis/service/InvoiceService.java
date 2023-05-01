@@ -1,6 +1,7 @@
 package com.nis.service;
 
 import com.nis.entity.Invoice;
+import com.nis.entity.Payment;
 import com.nis.exception.ResourceNotFoundException;
 import com.nis.model.*;
 import com.nis.model.dto.InvoiceDTO;
@@ -24,7 +25,7 @@ public interface InvoiceService {
     byte[] getInvoicePdf(String invoiceId) throws Exception;
 
     Invoice getInvoiceById(String id) throws ResourceNotFoundException ;
-
+    List<Payment> getOrderListByInvoiceId(String invoiceId) throws ResourceNotFoundException ;
     Map<String, String> getInvoiceDetailsInMap(Invoice invoice);
 
     void updateInvoicePayment(String invoiceId, Long paymentId,PaymentStatus status) throws ResourceNotFoundException;
